@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug game_leaderboard",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "game_leaderboard.main",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}

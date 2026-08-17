@@ -101,6 +101,12 @@ def main():
             EC.element_to_be_clickable((By.ID, "nameNext"))
         )
 
+
+        logging.debug(f"nameNext displayed: {name_next.is_displayed()}")
+        logging.debug(f"nameNext enabled: {name_next.is_enabled()}")
+        logging.debug(f"nameNext disabled attr: {name_next.get_attribute('disabled')}")
+        logging.debug(f"nameNext outerHTML: {name_next.get_attribute('outerHTML')}")
+
         name_next.click()
         logging.info("Clicked submit button (username)")
 
