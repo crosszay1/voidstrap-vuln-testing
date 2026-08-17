@@ -1,6 +1,6 @@
 import undetected_chromedriver as uc
 import logging
-from smails_box import SmailsMailbox #our mailbox thing
+from game_leaderboard.smails_box import SmailsMailbox #our mailbox thing
 from selenium.webdriver.common.by import By
 
 def main():
