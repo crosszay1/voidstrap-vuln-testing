@@ -3,6 +3,7 @@ import random
 import string
 import time
 
+import requests
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -10,6 +11,31 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from game_leaderboard.smails_box import SmailsMailbox
 
+def verify_email(email, code):
+    url = "https://voidstrapp.pages.dev/api/auth/email/verify"
+
+    headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0",
+        "Accept": "*/*",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Content-Type": "application/json",
+        "Referer": "https://voidstrapp.pages.dev/pages/login",
+        "Origin": "https://voidstrapp.pages.dev",
+    }
+
+    payload = {
+        "email": email,
+        "code": code
+    }
+
+    response = requests.post(
+        url,
+        headers=headers,
+        json=payload,
+        timeout=10
+    )
+
+    return response.status_code, response.json()
 
 def main():
     print("Starting Chrome...", flush=True)
@@ -73,58 +99,21 @@ def main():
             if code:
                 logging.info(f"Got code: {code}")
                 break
-            if i == 30:
+            if i == 29:
                 logging.critical("Failed to get code after 30 seconds")
                 exit(1)
             time.sleep(2)
 
-        driver.find_element(By.ID, "codeInput").send_keys(code)
+            status_code, email_result = verify_email(mailbox.email, code)
 
-        logging.info(f"Entered code: {code}")
+            logging.info(f"Email verification result: {email_result}")
 
-        driver.find_element(By.ID, "codeSubmit").click()
-
-        logging.info("Clicked submit button (email code)")
-
-        username = ''.join(random.choices(string.ascii_letters, k=20))
-
-        username = ''.join(random.choices(string.ascii_letters, k=20))
-        logging.info(f"Generated random username: {username}")
-
-        wait = WebDriverWait(driver, 15)
-
-        name_input = wait.until(
-            EC.visibility_of_element_located((By.ID, "nameInput"))
-        )
-
-        name_input.send_keys(username)
-        logging.info(f"Entered username: {username}")
-
-        name_next = wait.until(
-            EC.element_to_be_clickable((By.ID, "nameNext"))
-        )
-
-
-        logging.debug(f"nameNext displayed: {name_next.is_displayed()}")
-        logging.debug(f"nameNext enabled: {name_next.is_enabled()}")
-        logging.debug(f"nameNext disabled attr: {name_next.get_attribute('disabled')}")
-        logging.debug(f"nameNext outerHTML: {name_next.get_attribute('outerHTML')}")
-
-        time.sleep(1)  # Wait a moment before clicking because otherwise it doesn't work tbh I don't fucking know
-
-        name_next.click()
-        logging.info("Clicked submit button (username)")
-
-        avatar_done = wait.until(EC.element_to_be_clickable((By.ID, "avatarDone")))
-
-        driver.execute_script(
-            "arguments[0].scrollIntoView({block: 'center'});",
-            avatar_done
-        )
-
-        avatar_done.click()
-
-        logging.info("Clicked submit button (avatar)")
+            if email_result.get("ok"):
+                token = email_result["token"]
+                logging.info(f"Token: {token}")
+                print(f"Token: {token}")
+            else:
+                logging.error("Verification failed")
         input("Press Enter to close...")
 
     finally:
