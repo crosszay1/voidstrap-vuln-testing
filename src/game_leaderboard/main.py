@@ -12,12 +12,12 @@ def main():
     logging.basicConfig(level=logging.DEBUG)
 
     try:
-        logging.debug("Loading login page...", flush=True)
+        logging.debug("Loading login page...")
         driver.get("https://voidstrapp.pages.dev/pages/login")
-        logging.info("Page title:", driver.title, flush=True)
+        logging.info("Page title:", driver.title)
         input("Press Enter to close...")
     finally:
-        print("Closing Chrome...", flush=True)
+        logging.info("Closing Chrome...")
         driver.quit()
 
 
