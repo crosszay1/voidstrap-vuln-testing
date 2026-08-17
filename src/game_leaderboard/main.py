@@ -131,7 +131,7 @@ def main():
             with ThreadPoolExecutor(max_workers=1) as executor:
                 token = executor.submit(worker).result(timeout=30)
                 result = game_vote(token)
-                logging.info(f"Vote result: {result.status_code}")
+                logging.info(f"Vote result: {result}")
                 return
 
         except TimeoutError:
@@ -145,7 +145,7 @@ def main():
     raise Exception("Failed 3 consecutive attempts")
 
 
-def game_vote(auth, universe_id=redact, vote=1): #vibecoded, didn't feel like it
+def game_vote(auth, universe_id=102641798443470, vote=1): #vibecoded, didn't feel like it
     logging.debug(f"Voting with auth: {auth}, universe_id: {universe_id}, vote: {vote}")
     url = "https://voidstrapp.pages.dev/api/gamevote"
 
