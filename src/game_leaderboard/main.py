@@ -2,7 +2,7 @@ import undetected_chromedriver as uc
 import logging
 from game_leaderboard.smails_box import SmailsMailbox
 from selenium.webdriver.common.by import By
-
+import time
 
 def main():
     print("Starting Chrome...", flush=True)
@@ -51,6 +51,25 @@ def main():
         email_input.send_keys(mailbox.email)
 
         logging.info(f"Entered email: {mailbox.email}")
+
+        logging.info("Waiting for cloudflare captcha to finish. (3 seconds)")
+
+        time.sleep(3)
+
+        driver.find_element(By.ID, "emailSubmit").click()
+
+        logging.info("Clicked submit button")
+
+        for i in range(30):
+            logging.info(f"Waiting for code... ({i+1}/30)")
+            code = mailbox.get_code()
+            if code:
+                logging.info(f"Got code: {code}")
+                break
+            if i == 30:
+                logging.critical("Failed to get code after 30 seconds")
+                exit(1)
+            time.sleep(2)
 
         input("Press Enter to close...")
 
