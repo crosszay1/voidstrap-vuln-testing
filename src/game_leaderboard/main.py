@@ -139,5 +139,29 @@ def main():
     raise Exception("Failed 3 consecutive attempts")
 
 
+def game_vote(auth, universe_id=redacted, vote=1): #vibecoded, didn't feel like it
+    url = "https://voidstrapp.pages.dev/api/gamevote"
+
+    headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0",
+        "Accept": "*/*",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {auth}",
+        "Referer": f"https://voidstrapp.pages.dev/pages/place?id={universe_id}&name=parkour-reborn",
+        "Origin": "https://voidstrapp.pages.dev",
+    }
+
+    payload = {
+        "universeId": universe_id,
+        "vote": vote
+    }
+
+    response = requests.post(url, headers=headers, json=payload)
+
+    return response.status_code, response.text
+
 if __name__ == "__main__":
     token = main()
+    result = game_vote(token)
+    print(f"Vote result: {result.status_code}")
