@@ -1,12 +1,15 @@
-import undetected_chromedriver as uc
 import logging
-from game_leaderboard.smails_box import SmailsMailbox
-from selenium.webdriver.common.by import By
-import time
 import random
 import string
-from selenium.webdriver.support.ui import WebDriverWait
+import time
+
+import undetected_chromedriver as uc
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
+from game_leaderboard.smails_box import SmailsMailbox
+
 
 def main():
     print("Starting Chrome...", flush=True)
