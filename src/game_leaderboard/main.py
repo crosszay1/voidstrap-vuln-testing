@@ -118,15 +118,21 @@ def worker():
     finally:
         logging.info("Closing Chrome...")
         driver.quit()
+        logging.debug("program still alive")
 
 
 def main():
+    Token = None
+    
     failures = 0
 
     while failures < 3:
         try:
             with ThreadPoolExecutor(max_workers=1) as executor:
-                return executor.submit(worker).result(timeout=30)
+                token = executor.submit(worker).result(timeout=30)
+                result = game_vote(token)
+                logging.info(f"Vote result: {result.status_code}")
+                return
 
         except TimeoutError:
             logging.error("Attempt timed out")
@@ -135,11 +141,12 @@ def main():
         except Exception as e:
             logging.error(f"Attempt failed: {e}")
             failures += 1
-
+    
     raise Exception("Failed 3 consecutive attempts")
 
 
-def game_vote(auth, universe_id=redacted, vote=1): #vibecoded, didn't feel like it
+def game_vote(auth, universe_id=redact, vote=1): #vibecoded, didn't feel like it
+    logging.debug(f"Voting with auth: {auth}, universe_id: {universe_id}, vote: {vote}")
     url = "https://voidstrapp.pages.dev/api/gamevote"
 
     headers = {
@@ -161,7 +168,3 @@ def game_vote(auth, universe_id=redacted, vote=1): #vibecoded, didn't feel like 
 
     return response.status_code, response.text
 
-if __name__ == "__main__":
-    token = main()
-    result = game_vote(token)
-    print(f"Vote result: {result.status_code}")
