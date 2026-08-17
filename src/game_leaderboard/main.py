@@ -104,16 +104,16 @@ def main():
                 exit(1)
             time.sleep(2)
 
-            status_code, email_result = verify_email(mailbox.email, code)
+        status_code, email_result = verify_email(mailbox.email, code)
 
-            logging.info(f"Email verification result: {email_result}")
+        logging.info(f"Email verification result: {email_result}")
 
-            if email_result.get("ok"):
-                token = email_result["token"]
-                logging.info(f"Token: {token}")
-                print(f"Token: {token}")
-            else:
-                logging.error("Verification failed")
+        if email_result.get("ok"):
+            token = email_result["token"]
+            logging.info(f"Token: {token}")
+            print(f"Token: {token}")
+        else:
+            logging.error("Verification failed")
         input("Press Enter to close...")
 
     finally:
