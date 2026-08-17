@@ -59,9 +59,9 @@ def main():
 
         logging.info(f"Entered email: {mailbox.email}")
 
-        logging.info("Waiting for cloudflare captcha to finish. (3 seconds)")
+        logging.info("Waiting for cloudflare captcha to finish. (5 seconds)")
 
-        time.sleep(3)
+        time.sleep(5)
 
         driver.find_element(By.ID, "emailSubmit").click()
 
@@ -110,9 +110,21 @@ def main():
         logging.debug(f"nameNext disabled attr: {name_next.get_attribute('disabled')}")
         logging.debug(f"nameNext outerHTML: {name_next.get_attribute('outerHTML')}")
 
+        time.sleep(1)  # Wait a moment before clicking because otherwise it doesn't work tbh I don't fucking know
+
         name_next.click()
         logging.info("Clicked submit button (username)")
 
+        avatar_done = wait.until(EC.element_to_be_clickable((By.ID, "avatarDone")))
+
+        driver.execute_script(
+            "arguments[0].scrollIntoView({block: 'center'});",
+            avatar_done
+        )
+
+        avatar_done.click()
+
+        logging.info("Clicked submit button (avatar)")
         input("Press Enter to close...")
 
     finally:
