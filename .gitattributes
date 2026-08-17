@@ -1,0 +1,6 @@
+# Do this so windows doesn't mess up line endings for shell scripts, etc.. with it's CRLF line endings.
+* text=auto eol=lf
+*.sh text eol=lf
+Dockerfile text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
