@@ -2,6 +2,7 @@ import logging
 import random
 import string
 import time
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
 
 import requests
 import undetected_chromedriver as uc
@@ -10,6 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from game_leaderboard.smails_box import SmailsMailbox
+
 
 def verify_email(email, code):
     url = "https://voidstrapp.pages.dev/api/auth/email/verify"
@@ -37,7 +39,8 @@ def verify_email(email, code):
 
     return response.status_code, response.json()
 
-def main():
+
+def worker():
     print("Starting Chrome...", flush=True)
 
     options = uc.ChromeOptions()
@@ -69,10 +72,8 @@ def main():
             f"Token: {mailbox.token} Email: {mailbox.email}"
         )
 
-        # Find the email input
         email_input = driver.find_element(By.ID, "emailInput")
 
-        #Enable input bc it's disabled no clue why
         driver.execute_script("""
             arguments[0].removeAttribute("disabled");
             arguments[0].removeAttribute("aria-disabled");
@@ -80,7 +81,6 @@ def main():
             arguments[0].classList.remove("opacity-40");
         """, email_input)
 
-        # Enter the mailbox email
         email_input.send_keys(mailbox.email)
 
         logging.info(f"Entered email: {mailbox.email}")
@@ -111,15 +111,33 @@ def main():
         if email_result.get("ok"):
             token = email_result["token"]
             logging.info(f"Token: {token}")
-            print(f"Token: {token}")
+            return token
         else:
             logging.error("Verification failed")
-        input("Press Enter to close...")
 
     finally:
         logging.info("Closing Chrome...")
         driver.quit()
 
 
+def main():
+    failures = 0
+
+    while failures < 3:
+        try:
+            with ThreadPoolExecutor(max_workers=1) as executor:
+                return executor.submit(worker).result(timeout=30)
+
+        except TimeoutError:
+            logging.error("Attempt timed out")
+            failures += 1
+
+        except Exception as e:
+            logging.error(f"Attempt failed: {e}")
+            failures += 1
+
+    raise Exception("Failed 3 consecutive attempts")
+
+
 if __name__ == "__main__":
-    main()
+    token = main()
