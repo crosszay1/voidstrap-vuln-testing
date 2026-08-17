@@ -8,7 +8,7 @@ def main():
     options.headless = False
     options.add_argument("--start-maximized")
 
-    driver = uc.Chrome(options=options, headless=False)
+    driver = uc.Chrome(options=options, headless=False, version_main=151) #Because cachy os repos only support this and like fuck I don't wanna fuck with getting the new one this is easier
     logging.basicConfig(level=logging.DEBUG)
 
     try:
