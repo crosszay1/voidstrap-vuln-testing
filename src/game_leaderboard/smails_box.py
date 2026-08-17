@@ -17,7 +17,7 @@ class SmailsMailbox:
             token = data.get("token")
             email = data.get("address")
 
-            if not token or email:
+            if not token or not email:
                 return False
 
             self.token = token
