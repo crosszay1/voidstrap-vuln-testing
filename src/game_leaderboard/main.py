@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from game_leaderboard.smails_box import SmailsMailbox
-
+logging.basicConfig(level=logging.DEBUG)
 
 def verify_email(email, code):
     url = "https://voidstrapp.pages.dev/api/auth/email/verify"
@@ -55,7 +55,7 @@ def worker():
         version_main=151
     )
 
-    logging.basicConfig(level=logging.DEBUG)
+    
 
     try:
         logging.debug("Loading login page...")
