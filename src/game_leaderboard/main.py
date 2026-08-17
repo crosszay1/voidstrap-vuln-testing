@@ -3,6 +3,10 @@ import logging
 from game_leaderboard.smails_box import SmailsMailbox
 from selenium.webdriver.common.by import By
 import time
+import random
+import string
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 def main():
     print("Starting Chrome...", flush=True)
@@ -70,6 +74,35 @@ def main():
                 logging.critical("Failed to get code after 30 seconds")
                 exit(1)
             time.sleep(2)
+
+        driver.find_element(By.ID, "codeInput").send_keys(code)
+
+        logging.info(f"Entered code: {code}")
+
+        driver.find_element(By.ID, "codeSubmit").click()
+
+        logging.info("Clicked submit button (email code)")
+
+        username = ''.join(random.choices(string.ascii_letters, k=20))
+
+        username = ''.join(random.choices(string.ascii_letters, k=20))
+        logging.info(f"Generated random username: {username}")
+
+        wait = WebDriverWait(driver, 15)
+
+        name_input = wait.until(
+            EC.visibility_of_element_located((By.ID, "nameInput"))
+        )
+
+        name_input.send_keys(username)
+        logging.info(f"Entered username: {username}")
+
+        name_next = wait.until(
+            EC.element_to_be_clickable((By.ID, "nameNext"))
+        )
+
+        name_next.click()
+        logging.info("Clicked submit button (username)")
 
         input("Press Enter to close...")
 
