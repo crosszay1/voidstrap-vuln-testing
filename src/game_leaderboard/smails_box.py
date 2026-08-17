@@ -5,7 +5,8 @@ class SmailsMailbox:
     BASE_URL = "https://smails.dev/api/mailbox"
 
     def __init__(self):
-        self._token = None
+        self.token = None
+        self.email = None
 
     def create_mailbox(self) -> bool:
         try:
@@ -14,24 +15,26 @@ class SmailsMailbox:
 
             data = response.json()
             token = data.get("token")
+            email = data.get("address")
 
-            if not token:
+            if not token or email:
                 return False
 
-            self._token = token
+            self.token = token
+            self.email = email
             return True
 
         except (requests.RequestException, ValueError):
             return False
 
     def get_code(self):
-        if not self._token:
+        if not self.token:
             return None
 
         try:
             response = requests.get(
                 f"{self.BASE_URL}/messages",
-                headers={"Authorization": f"Bearer {self._token}"},
+                headers={"Authorization": f"Bearer {self.token}"},
                 timeout=10,
             )
             response.raise_for_status()

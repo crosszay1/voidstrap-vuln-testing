@@ -10,14 +10,20 @@ def main():
     options.headless = False
     options.add_argument("--start-maximized")
 
+    mailbox = SmailsMailbox()
     driver = uc.Chrome(options=options, headless=False, version_main=151) #Because cachy os repos only support this and like fuck I don't wanna fuck with getting the new one this is easier
     logging.basicConfig(level=logging.DEBUG)
 
     try:
         logging.debug("Loading login page...")
         driver.get("https://voidstrapp.pages.dev/pages/login")
-        logging.info("Page title:", driver.title)
-        input("Press Enter to close...")
+        logging.info("Requesting mailbox")
+        if not mailbox.create_mailbox():
+            logging.critical("Mailbox creation failed")
+            exit(1)
+        logging.info(f"Created mailbox successfully. Token: {mailbox.token} Email: {mailbox.email}")
+
+        input("enter to close")
     finally:
         logging.info("Closing Chrome...")
         driver.quit()
