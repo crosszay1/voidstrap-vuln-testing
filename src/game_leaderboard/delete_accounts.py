@@ -4,8 +4,21 @@ import time
 # TODO: Replace this list with your actual tokens
 tokens = [
     "6b7287ccaccd83cdcdbe2430bed62ad748990fd2feed53e387633f4418314306",
-    "your_second_token_here",
-    "your_third_token_here"
+    "7222bd8672af0e95fe7be09feef9a8759b3356470c61095f480733e3f73b45ec",
+    "4d83d0d5c93eda947cded7f16fb218df514e6e7823efdf1ee0a4c6c2ce85245e",
+    "d8930fd38320e811d9a8aa5c473ad852404198e6c22c36ec60d96b360fe4a514",
+    "b45c749b2c8d5284187822360ebb0fb0f0ecdc1968a2b1dbb4518bdb40fc6816",
+    "f8701c08114cfc658c8c2306527ea1281bbf48e09dd8859dce98ad071519ab62",
+    "e3bfb8d7b0443895ac143b0d43423d2a0414a9507b3d08b94ca275f615071c01",
+    "20fe5cbf86ae7c419f39c76a07efa5436f9d06ea4c07459fa61a0f8e0c89370f",
+    "361dbc63670306fd28a6098ded448823aa7c594ff52a0a7657c919c1a3ab7938",
+    "51ab8192711b46cb9a20103ff2ad3b6a581d151ea59fc9f5e1af9c84990ed1ac",
+    "dfa249912a214f2a64467e5e8ed7b2c0adc4a9fa1f197e4bc28874c7f82b77d5",
+    "336548efdfe923bef737e938ff3f3648cadd96c8e0919df0c96fb9961d86ed1e",
+    "ef6497cdbd69bf3925f388ce785a9cfcbe5da7076b76bb8021ebba69b1d5dc84",
+    "d6eef754a9f75dc3922ad96252047eeedf1605f8c829eb9d479ce8f0835d35fb",
+    "de6ce305b9751d09d0f167ac2143f7721275463373fdceb6fd14bc0a779f67ed",
+    "db5bf22495469b7971fa76521024b92ce59df06d733928cd5b40afd173539c1a"
 ]
 
 url = "https://voidstrapp.pages.dev/api/account"
@@ -50,6 +63,6 @@ for index, token in enumerate(tokens, start=1):
         print(f"[{index}/{len(tokens)}] ⚠️ Error: {token} | Exception: {e}")
     
     # Small delay to prevent overwhelming the server or triggering rate limits
-    time.sleep(1.5)
+    time.sleep(0.5)
 
 print("done.")
