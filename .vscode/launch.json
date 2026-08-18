@@ -2,10 +2,20 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug game_leaderboard",
+      "name": "Debug collect_tokens",
       "type": "debugpy",
       "request": "launch",
-      "module": "game_leaderboard.main",
+      "module": "game_leaderboard.collect_tokens",
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Debug vote",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "game_leaderboard.vote",
       "python": "${workspaceFolder}/.venv/bin/python",
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",

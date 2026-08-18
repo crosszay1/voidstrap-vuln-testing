@@ -1,17 +1,18 @@
 import logging
-import random
-import string
 import time
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
+from pathlib import Path
 
 import requests
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 
 from game_leaderboard.smails_box import SmailsMailbox
+
 logging.basicConfig(level=logging.DEBUG)
+
+TOKENS_FILE = Path(__file__).parent / "tokens.txt"
+
 
 def verify_email(email, code):
     url = "https://voidstrapp.pages.dev/api/auth/email/verify"
@@ -40,6 +41,12 @@ def verify_email(email, code):
     return response.status_code, response.json()
 
 
+def append_token(token: str) -> None:
+    with TOKENS_FILE.open("a") as f:
+        f.write(token + "\n")
+    logging.info(f"Appended token to {TOKENS_FILE}")
+
+
 def worker():
     print("Starting Chrome...", flush=True)
 
@@ -54,8 +61,6 @@ def worker():
         headless=False,
         version_main=151
     )
-
-    
 
     try:
         logging.debug("Loading login page...")
@@ -122,8 +127,6 @@ def worker():
 
 
 def main():
-    failures = 0
-
     for i in range(50):
         logging.info(f"Starting run {i + 1}/50")
 
@@ -133,8 +136,8 @@ def main():
             try:
                 with ThreadPoolExecutor(max_workers=1) as executor:
                     token = executor.submit(worker).result(timeout=30)
-                    result = game_vote(token)
-                    logging.info(f"Run {i + 1} vote result: {result}")
+                    if token:
+                        append_token(token)
                     break
 
             except TimeoutError:
@@ -150,26 +153,6 @@ def main():
 
     logging.info("Completed all 50 runs")
 
-def game_vote(auth, universe_id=740581899, vote=1): #vibecoded, didn't feel like it
-    logging.debug(f"Voting with auth: {auth}, universe_id: {universe_id}, vote: {vote}")
-    url = "https://voidstrapp.pages.dev/api/gamevote"
 
-    headers = {
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0",
-        "Accept": "*/*",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {auth}",
-        "Referer": f"https://voidstrapp.pages.dev/pages/place?id={universe_id}&name=parkour-reborn",
-        "Origin": "https://voidstrapp.pages.dev",
-    }
-
-    payload = {
-        "universeId": universe_id,
-        "vote": vote
-    }
-
-    response = requests.post(url, headers=headers, json=payload)
-
-    return response.status_code, response.text
-
+if __name__ == "__main__":
+    main()

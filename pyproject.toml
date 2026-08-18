@@ -10,7 +10,8 @@ dependencies = [
 ]
 
 [project.scripts]
-dev = "game_leaderboard.main:main"
+collect-tokens = "game_leaderboard.collect_tokens:main"
+vote = "game_leaderboard.vote:main"
 
 [build-system]
 requires = ["hatchling"]
