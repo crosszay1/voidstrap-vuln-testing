@@ -6,7 +6,7 @@ I specifically targeted the website's "gameboard" feature, while allowed users t
 
 ## Findings
 - Voidstraps website uses a lenient captcha on signup, allowing malicious actors to easily create hundreds of accounts automatically, without so much as having to pay for captcha bypassing software
-- Voidstrap's only ratelimits account signups in any impactful capacity.
+- Voidstrap's does not ratelimit account signups in any impactful capacity.
 
 Using this repo, I was able to create many Voidstrap accounts, and bring games to the front page.
 
