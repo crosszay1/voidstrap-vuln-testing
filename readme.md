@@ -12,4 +12,5 @@ Using this repo, I was able to create many Voidstrap accounts, and bring games t
 
 # These issues have been now been fixed. Thus this repo has been publicized 
 Reported: 7/18/2026
+
 Fixed: 8/18/2026
